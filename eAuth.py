@@ -6,7 +6,7 @@ import pickle, caesarCipher
 def adminLogin(): #Admin login details check
     adminName = input("Admin Name: ")
     adminPassword = input("Password: ")
-    f = open("cred.dat", "rb")
+    f = open("Data/cred.dat", "rb")
     try:
         while True:
             data = pickle.load(f)
