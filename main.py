@@ -21,8 +21,11 @@ while True: #Main code starts here
                 print("5. Start voting session")
                 print("6. Logout")
 
-                mainOp = int(input("Enter your choice: "))
-                
+                try:
+                    mainOp = int(input("Enter your choice: "))
+                except:
+                    print("Invalid Choice")
+                    continue
                 #Voters' List related operations
                 if mainOp == 1:
                     while True:
@@ -78,22 +81,26 @@ while True: #Main code starts here
                 elif mainOp == 4: 
                     allSettings = fetchSettings() 
                     for i in allSettings: print(i) #lists settings of all sessions
-                    voteCount = elecSettings(lg[1])[1:]
+                    
+                    elecSettings(lg[1])
                 
                 #Election session
                 elif mainOp == 5:
                     sessionID = input("Session ID: ")
-                    if confirm:
+                    if confirm():
                         settings = fetchSettings(sessionID)
                         while True:
-                            reply = elecSess(settings, voteCount)
+                            reply = elecSess(sessionID, settings, voteCount)
                             if reply[0]:
                                 voteCount = [reply[1]]
+                                continue
+                            elif reply[2]:
                                 continue
                             else:
                                 saveSession(sessionID, voteCount)
                                 print("Session saved...")
                                 print("Exiting session")
+                                break
                     else:
                         continue
                 #Logout

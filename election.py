@@ -1,5 +1,6 @@
 # imports
 import datetime, pickle, uuid
+from pprint import pprint
 from helper import *
 from eAuth import *
 
@@ -37,12 +38,12 @@ def elecSettings(admin):
     if confirm():
         voteCount = [["Candidate ID", "Candidate Name", "Votes"]]
         settingsFile = open("Data/settings.dat", "ab")
-        timeStamp = datetime.datetime.now()
+        timeStamp = str(datetime.datetime.now())
         settings = {"Session ID":sessionID, "Time": timeStamp, "Election Officer":admin,"Post":post,"Booth Number":boothNo}
         pickle.dump(settings,settingsFile)
         
         for i in fetchCandidates():
-            voteCount.append(i[0],[i[1],0])
+            voteCount.append([i[0],i[1],0])
         
         with open(f"Data/voteCount-{sessionID}.csv", "a") as voteCountFile:
             w_o = csv.writer(voteCountFile)
@@ -53,7 +54,12 @@ def elecSettings(admin):
         print("Aborting...")
         return
 
-def elecSess(settings,voteCount):
+def elecSess(sessionID, settings,voteCount):
+    if voteCount == []:
+        with open(f"Data/voteCount-{sessionID}.csv", "r") as voteCountFile:
+            r_o = csv.reader(voteCountFile)
+            for i in r_o: voteCount.append(i)
+
     if voterLogin():
         print("Candidate List:")
         print(displayCandidates())
@@ -62,12 +68,12 @@ def elecSess(settings,voteCount):
         print(f"Aforementioned table is the list of candidates for the election standing for {post}.\nYou may pick the candidate of your choice by submitting the unique id associated with the candidate (see candidate list — first column)")
         
         data = fetchCandidates()
-        
+
         while True:
             ch = input("Your choice: ")
             if ch == "EXIT":
                 print("Saving session...")
-                return (False,)
+                return (False, voteCount, False)
             for i in data:
                 if ch == i[0]:
                     print(f"You have chosen to vote for {i[1]}")
@@ -75,23 +81,23 @@ def elecSess(settings,voteCount):
                     if confirm():
                         voteCount = vote(i[0], voteCount)
                         print("Vote casted successfully!")
-                        return (True, voteCount)
+                        return (True, voteCount, False)
                     else:
                         print("Recast your vote!")
-                        continue
-            else:
-                print("Invalid candidate ID")
+                        pass
+            # need to add code to let use know if candidate id submitted is incorrect
     else:
         print("Incorrect voter credentials!")
+        return(False, voteCount, True)
 
 def vote(choiceID, voteCount):
     for i in voteCount:
         if choiceID == i[0]:
-            voteCount[voteCount.index(i)][2] += 1
+            voteCount[voteCount.index(i)][2] = 1+int(voteCount[voteCount.index(i)][2])
             return voteCount
 
 def saveSession(sessionID, voteCount):
-    with open(f"Data/voteCount-{sessionID}.csv", "a") as voteCountFile:
+    with open(f"Data/voteCount-{sessionID}.csv", "w") as voteCountFile:
             w_o = csv.writer(voteCountFile)
             w_o.writerows(voteCount)
 #^---------------------------------------------------^Election Session^--------------------------------------------------^
