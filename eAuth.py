@@ -21,7 +21,7 @@ def adminLogin(): #Admin login details check
 def voterLogin(): #Checks whether the VOTER'S name and UID exists within the database and correspond to each other
     name = input("Name: ")
     ID = input("ID: ")
-    votersFile = open("voterList.dat", "rb")
+    votersFile = open("Data/voterList.dat", "rb")
     try:
         while True:
             voterData = pickle.load(votersFile)
@@ -29,7 +29,7 @@ def voterLogin(): #Checks whether the VOTER'S name and UID exists within the dat
                 votersFile.close()
                 return True
     except EOFError:
-        votersFile.close() 
+        votersFile.close()
         return False
 
 #^-------------------------------------------------------^Logins^--------------------------------------------------------^

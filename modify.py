@@ -11,7 +11,7 @@ def adminCreate(): #Allows the admin to add a new admin user
     if confirm():
         cred = {"Admin Name":caesarCipher.caesarEncrypt(adminName), "Password":caesarCipher.caesarEncrypt(adminPassword)} #Dictionary containing new admin details to be dumped
 
-        with open("Election App/Data/cred.dat", "ab") as f: #Dumping the new admin's data
+        with open("Data/cred.dat", "ab") as f: #Dumping the new admin's data
             pickle.dump(cred, f) 
         print(f"Added {adminName} as an administrator!")
     else:
@@ -39,7 +39,7 @@ def adminDelete(): #Allows the admin to delete an existing admin profile
         except EOFError:
             f.close()
 
-        with open("Election App/Data/cred.dat", "wb") as f: #Writing all records excluding the one to be deleted
+        with open("Data/cred.dat", "wb") as f: #Writing all records excluding the one to be deleted
             for i in l:
                 pickle.dump(i, f)
     else:
@@ -50,7 +50,7 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
     adminPassword = input("Password: ")
     
     if confirm():
-        f = open("Election App/Data/cred.dat", "rb")
+        f = open("Data/cred.dat", "rb")
         l = [] #Records to be rewritten are stored in this list
 
         try: #Searching for the record to be modified
@@ -68,7 +68,7 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
         except EOFError:
             f.close()
 
-        with open("Election App/Data/cred.dat", 'wb') as f: #Writing back all the records including the modified one
+        with open("Data/cred.dat", 'wb') as f: #Writing back all the records including the modified one
             for i in l:
                 pickle.dump(i, f)
         print(f"{adminName}'s password updated!")
@@ -83,11 +83,11 @@ def voterAdd(): #To add a record to voterList.csv and update voterList.dat with 
     addVoterUUID = str(uuid.uuid4()).split("-")[0]
 
     if confirm():
-        with open("Election App/Data/voterList.csv", "a") as f:
+        with open("Data/voterList.csv", "a") as f:
             writer = csv.writer(f)
             writer.writerow([addVoterName,addVoterAge,addVoterSex])
 
-        with open("Election App/Data/voterList.dat", "ab") as f:
+        with open("Data/voterList.dat", "ab") as f:
             pickle.dump({"ID":addVoterUUID, "Name":addVoterName}, f)
 
         print(f"Successfully added {addVoterName}'s details into the voters' list")
@@ -108,7 +108,7 @@ def voterDelete(): #To delete a record from voterList.csv and voterList.dat
                 continue
             l.append(i)
 
-        with open("Election App/Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
+        with open("Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
             for i in l:
                 pickle.dump(i, f)
 
@@ -119,7 +119,7 @@ def voterDelete(): #To delete a record from voterList.csv and voterList.dat
             if i[0] != delVoterName: #Storing all records except the record to delete
                 l.append(i)
 
-        with open("Election App/Data/voterList.csv", "w") as f: #Writing all the records except the record to delete
+        with open("Data/voterList.csv", "w") as f: #Writing all the records except the record to delete
             writer = csv.writer(f)
             writer.writerows(l)
     else:
@@ -134,7 +134,7 @@ def candidateAdd(): #Adds details of a NEW CANDIDATE into candidateList.csv
     addCandidateID = str(uuid.uuid4()).split("-")[0]
     
     if confirm():
-        with open("Election App/Data/candidateList.csv", "a") as f:
+        with open("Data/candidateList.csv", "a") as f:
             writer = csv.writer(f)
             writer.writerow([addCandidateID,addCandidateName,addCandidateAge,addCandidateSex,addCandidateAbout])
         print(f"Successfully added {addCandidateName}'s details into the records")
@@ -154,7 +154,7 @@ def candidateDelete(): #Deletes details of an existing CANDIDATE from candidateL
                 continue
             l.append(i)
 
-        with open("Election App/Data/candidateList.csv", 'w') as f: #Writing all the records except the one to be deleted
+        with open("Data/candidateList.csv", 'w') as f: #Writing all the records except the one to be deleted
             writer = csv.writer(f)
             writer.writerows(l)
     else:

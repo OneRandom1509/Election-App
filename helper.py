@@ -18,23 +18,23 @@ def confirm():
 
 def fetchCandidates():
     data = []
-    with open("Election App/Data/candidateList.csv", 'r', encoding = 'utf8') as f:
+    with open("Data/candidateList.csv", 'r', encoding = 'utf8') as f:
         reader = csv.reader(f)
         for i in reader:
             data.append(i)
-    return data
+    return data[1:]
 
 def fetchVotersCSV():
     data = []
-    with open("Election App/Data/voterList.csv", 'r') as f:
+    with open("Data/voterList.csv", 'r') as f:
         reader = csv.reader(f)
         for i in reader:
             data.append(i)
-    return data
+    return data[1:]
 
 def fetchVotersBIN():
     data = []
-    f = open("Election App/Data/voterList.dat", 'rb')
+    f = open("Data/voterList.dat", 'rb')
     try:
         while True:
             i = pickle.load(f)
@@ -45,7 +45,7 @@ def fetchVotersBIN():
 
 def fetchSettings(sessionID=None):
     if sessionID is None:
-        settingsFile = open("Election App/Data/settings.dat", "rb")
+        settingsFile = open("Data/settings.dat", "rb")
         settingsList = []
         try:
             while True:
@@ -55,7 +55,7 @@ def fetchSettings(sessionID=None):
             settingsFile.close()
         return settingsList
     else:
-        settingsFile = open("Election App/Data/settings.dat", "rb")
+        settingsFile = open("Data/settings.dat", "rb")
         try:
             while True:
                 settings = pickle.load(settingsFile)
@@ -67,7 +67,7 @@ def fetchSettings(sessionID=None):
             settingsFile.close()
 
 def fetchAdminUsers():
-    credFile = open("Election App/Data/cred.dat", "rb")
+    credFile = open("Data/cred.dat", "rb")
     adminUsers = []
     try:
         while True:
@@ -80,7 +80,7 @@ def fetchAdminUsers():
 #^--------------------------------------------------^Fetching records^---------------------------------------------------^
 #---------------------------------------------------Displaying records----------------------------------------------------
 
-def display_candidates(): #Displays the candidates details for the voters to see using prettytable  
+def displayCandidates(): #Displays the candidates details for the voters to see using prettytable  
     candidateTable = PrettyTable(["ID","Name","Age","Sex","Symbol","About"]) #Creates a table with headers from the csv file.
     
     candidateData = fetchCandidates()
@@ -91,7 +91,7 @@ def display_candidates(): #Displays the candidates details for the voters to see
     
     return candidateTable
 
-def display_voters(): #Displays the voter details for the admin to see using prettytable  
+def displayVoters(): #Displays the voter details for the admin to see using prettytable  
     data = fetchVotersBIN()
     for i in data: print(i)
     # Need to modify pretty table code to make use of data from binary file 
@@ -105,4 +105,4 @@ def display_voters(): #Displays the voter details for the admin to see using pre
     
     # return voterTable
 
-#^-------------------------------------------------^Displaying records^--------------------------------------------------^
+#^-------------------------------------------------^Displaying records^--------------------------------------------------^    

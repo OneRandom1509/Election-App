@@ -4,8 +4,11 @@ from eAuth import *
 from modify import *
 from election import *
 
-#--------------------------------------------------------Main Code--------------------------------------------------------
+#--------------------------------------------------------Global Vars--------------------------------------------------------
 
+voteCount = []
+
+#--------------------------------------------------------Main Code--------------------------------------------------------
 while True: #Main code starts here
     if fetchAdminUsers() != []:
         lg = adminLogin()
@@ -31,7 +34,7 @@ while True: #Main code starts here
                             voterDelete()
 
                         elif subOp == 3: 
-                            print(display_voters())
+                            print(displayVoters())
                         
                         elif subOp == 4:
                             print("Returning to main menu...")
@@ -48,7 +51,7 @@ while True: #Main code starts here
                             candidateDelete()
                         
                         elif subOp == 3:
-                            print(display_candidates())
+                            print(displayCandidates())
                             
                         elif subOp == 4:
                             print("Returning to main menu...")
@@ -75,17 +78,22 @@ while True: #Main code starts here
                 elif mainOp == 4: 
                     allSettings = fetchSettings() 
                     for i in allSettings: print(i) #lists settings of all sessions
-                    elecSettings(lg[1])
+                    voteCount = elecSettings(lg[1])[1:]
                 
                 #Election session
                 elif mainOp == 5:
-                    confirmation = input("Are you sure?(y/n): ")
-                    if confirmation.lower() == "y":
-                        sessionID = input("Session ID: ")
+                    sessionID = input("Session ID: ")
+                    if confirm:
                         settings = fetchSettings(sessionID)
                         while True:
-                            elecSess(settings)
-                            pass
+                            reply = elecSess(settings, voteCount)
+                            if reply[0]:
+                                voteCount = [reply[1]]
+                                continue
+                            else:
+                                saveSession(sessionID, voteCount)
+                                print("Session saved...")
+                                print("Exiting session")
                     else:
                         continue
                 #Logout
