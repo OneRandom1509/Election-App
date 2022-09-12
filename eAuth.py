@@ -1,6 +1,6 @@
 # imports
 import pickle, caesarCipher, csv
-
+from election import *
 #---------------------------------------------------------Logins----------------------------------------------------------
 
 def adminLogin(): #Admin login details check
@@ -21,22 +21,18 @@ def adminLogin(): #Admin login details check
 def voterLogin(): #Checks whether the VOTER'S name and UID exists within the database and correspond to each other
     ID = input("ID: ")
     name = input("Name: ")
+    
+    if ID == "EXIT" or name == "EXIT":
+        return "EXIT"
+        
     f = open("Data/voterList.csv", 'r')
     reader = csv.reader(f)
+    
     for i in reader:
-        if ID == i[0] and name == i[1]:
+        if ID == i[0] and name == i[1] and hasVoted(ID) == False:
             f.close()
             return True
     f.close()
     return False
-    # try:
-    #     while True:
-    #         voterData = pickle.load(votersFile)
-    #         if voterData["Name"] == name and voterData["ID"] == ID:
-    #             votersFile.close()
-    #             return True
-    # except EOFError:
-    #     votersFile.close()
-    #     return False
 
 #^-------------------------------------------------------^Logins^--------------------------------------------------------^

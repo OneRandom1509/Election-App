@@ -10,7 +10,7 @@ voteCount = []
 
 #--------------------------------------------------------Main Code--------------------------------------------------------
 while True: #Main code starts here
-    if fetchAdminUsers() != []:
+    if fetchAdminUsers() != []: #Check for existing admin user
         lg = adminLogin()
         if lg[0]:
             while True:
@@ -106,11 +106,17 @@ while True: #Main code starts here
                 #Logout
                 elif mainOp == 6:
                     break
+
+                #Terminating instance
+                elif mainOp == 7:
+                    print("Terminating instance...")
+                    print("Thank you for using Election App!")
+                    
                 else:
                     print("Invalid Operation!")
         else:
             print("Invalid Admin Details!")
     
     else:
-        adminCreate()
+        adminCreate() #Prompt to create a new admin user if no pre-existing admin user is found
 #^------------------------------------------------------^Main Code^------------------------------------------------------^

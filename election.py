@@ -42,7 +42,7 @@ def elecSettings(admin):
         settings = {"Session ID":sessionID, "Time": timeStamp, "Election Officer":admin,"Post":post,"Booth Number":boothNo}
         pickle.dump(settings,settingsFile)
         
-        for i in fetchCandidates():
+        for i in fetchCandidates()[1:]:
             voteCount.append([i[0],i[1],0])
         
         with open(f"Data/voteCount-{sessionID}.csv", "a") as voteCountFile:
@@ -75,7 +75,7 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                 print("Saving session...")
                 return (False, voteCount, False)
             
-            for i in data:
+            for i in data[1:]:
                 if ch == i[0]:
                     print(f"You have chosen to vote for {i[1]}")
                     # confirming vote
@@ -103,4 +103,11 @@ def saveSession(sessionID, voteCount):
     with open(f"Data/voteCount-{sessionID}.csv", "w") as voteCountFile:
             w_o = csv.writer(voteCountFile)
             w_o.writerows(voteCount)
+
+def hasVoted(ID):
+    voterData = fetchVoters()
+    for i in voterData[1:]:
+        if i[0] == ID and i[4] == "Y":
+            return True
+    return False
 #^---------------------------------------------------^Election Session^--------------------------------------------------^
