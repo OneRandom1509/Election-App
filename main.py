@@ -37,7 +37,7 @@ while True: #Main code starts here
                             voterDelete()
 
                         elif subOp == 3: 
-                            print(displayVoters())
+                            displayVoters()
                         
                         elif subOp == 4:
                             print("Returning to main menu...")
