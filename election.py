@@ -54,13 +54,13 @@ def elecSettings(admin):
         print("Aborting...")
         return
 
-def elecSess(sessionID, settings,voteCount):
+def elecSess(sessionID, settings,voteCount): #Starts a election session using an existing session id (check a file named voteCount-SessionID.csv)
     if voteCount == []:
         with open(f"Data/voteCount-{sessionID}.csv", "r") as voteCountFile:
             r_o = csv.reader(voteCountFile)
             for i in r_o: voteCount.append(i)
 
-    if voterLogin():
+    if voterLogin(): #Login check for voter
         print("Candidate List:")
         print(displayCandidates())
         print("")
@@ -74,6 +74,7 @@ def elecSess(sessionID, settings,voteCount):
             if ch == "EXIT":
                 print("Saving session...")
                 return (False, voteCount, False)
+            
             for i in data:
                 if ch == i[0]:
                     print(f"You have chosen to vote for {i[1]}")
@@ -81,12 +82,13 @@ def elecSess(sessionID, settings,voteCount):
                     if confirm():
                         voteCount = vote(i[0], voteCount)
                         print("Vote casted successfully!")
-                        print(voteCount)
+                        # print(voteCount)
                         return (True, voteCount, False)
                     else:
                         print("Recast your vote!")
                         pass
-            # need to add code to let user know if candidate id submitted is incorrect
+            else:
+                print("Candidate ID does not exist! Check the candidate list's ID column carefully and vote again")
     else:
         print("Incorrect voter credentials!")
         return(False, voteCount, True)

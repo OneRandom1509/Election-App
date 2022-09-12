@@ -20,24 +20,28 @@ def adminCreate(): #Allows the admin to add a new admin user
 def adminDelete(): #Allows the admin to delete an existing admin profile
     print("Submit the credentials of the admin user to be removed...")
     adminName = input("Enter Admin Name: ")
-    adminPassword = input("Enter admin password: ")
+    adminPassword = input("Enter Admin Password: ")
     
     if confirm():
-        f = open("Election App/Data/cred.dat", "rb")
+        f = open("Data/cred.dat", "rb")
         l = [] #Records to be rewritten are stored in this list
-
+        found = False
         try: #Reading all records in cred.dat
             while True: #Storing all records except the one to be deleted
                 data = pickle.load(f)
                 if adminName != caesarCipher.caesarDecrypt(data['Admin Name']):
                     l.append(data)
                 elif adminName == caesarCipher.caesarDecrypt(data['Admin Name']):
+                    found = True
                     if adminPassword != caesarCipher.caesarDecrypt(data["Password"]):
                         print("Incorrect password!\nAdmin user cannot be terminated without authorisation")
-                        f.close()
+                        f.close() #Will close the file and no record would be modified/deleted
                         return
         except EOFError:
             f.close()
+            if not found: #Checks if the inputted admin name exists in the first place or not 
+                print("Admin name does not exist in the database!") 
+                return                
 
         with open("Data/cred.dat", "wb") as f: #Writing all records excluding the one to be deleted
             for i in l:
@@ -48,7 +52,7 @@ def adminDelete(): #Allows the admin to delete an existing admin profile
 def adminUpdate(): #Allows the admin to update an existing admin profile
     adminName = input("Admin Name: ")
     adminPassword = input("Password: ")
-    
+    found = False
     if confirm():
         f = open("Data/cred.dat", "rb")
         l = [] #Records to be rewritten are stored in this list
@@ -57,6 +61,7 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
             while True:
                 data = pickle.load(f)
                 if adminName == caesarCipher.caesarDecrypt(data['Admin Name']) and adminPassword == caesarCipher.caesarDecrypt(data["Password"]):
+                    found = True
                     adminNewPassword = input("New password: ")
                     data["Password"] = adminNewPassword #Modifying the old password with the new password
                     print("Updated password!")
@@ -67,6 +72,9 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
                 l.append(data)  
         except EOFError:
             f.close()
+            if not found: #Checks if the inputted admin name exists in the first place or not 
+                print("Admin name does not exist in the database!") 
+                return
 
         with open("Data/cred.dat", 'wb') as f: #Writing back all the records including the modified one
             for i in l:
@@ -85,46 +93,50 @@ def voterAdd(): #To add a record to voterList.csv and update voterList.dat with 
     if confirm():
         with open("Data/voterList.csv", "a") as f:
             writer = csv.writer(f)
-            writer.writerow([addVoterName,addVoterAge,addVoterSex])
+            writer.writerow([addVoterUUID,addVoterName,addVoterAge,addVoterSex,'N'])
 
-        with open("Data/voterList.dat", "ab") as f:
-            pickle.dump({"ID":addVoterUUID, "Name":addVoterName}, f)
+        # with open("Data/voterList.dat", "ab") as f:
+        #     pickle.dump({"ID":addVoterUUID, "Name":addVoterName}, f)
 
-        print(f"Successfully added {addVoterName}'s details into the voters' list")
+        print(f"Successfully added {addVoterName}'s details into the voters' database!")
     else:
         print("Aborting")
 
 def voterDelete(): #To delete a record from voterList.csv and voterList.dat
     found = False
 
-    delVoterID = input("Enter voter's ID to delete from list: ")
+    delVoterName = input("Enter voter's name to delete from the database: ")
 
     if confirm():
-        l = [] #Records to be rewritten are stored in this list
+        # l = [] #Records to be rewritten are stored in this list
 
-        data = fetchVotersBIN() 
-        for i in data:
-            if i["ID"] == delVoterID: #Storing all the records except the record to delete
-                found = True
-                delVoterName = i["Name"]
-                continue
-            l.append(i)
-        if found:
-            print(f"Successfully deleted {delVoterID}'s details from the records")
-        else:
-            print("No such voter ID found!")
-            return
+        # data = fetchVotersBIN() 
+        # for i in data:
+        #     if i["ID"] == delVoterID: #Storing all the records except the record to delete
+        #         found = True
+        #         delVoterName = i["Name"]
+        #         continue
+        #     l.append(i)
+        # if found:
+        #     print(f"Successfully deleted {delVoterID}'s details from the records")
+        # else:
+        #     print("No such voter ID found!")
+        #     return
         
-        with open("Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
-            for i in l:
-                pickle.dump(i, f)
+        # with open("Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
+        #     for i in l:
+        #         pickle.dump(i, f)
 
         l = [] #Records to be rewritten are stored in this list
 
-        data = fetchVotersCSV()
+        data = fetchVoters()
         for i in data:
             if i[0] != delVoterName: #Storing all records except the record to delete
                 l.append(i)
+        
+        if not found:
+            print("No such voter exists in the database!")
+            return
 
         with open("Data/voterList.csv", "w") as f: #Writing all the records except the record to delete
             writer = csv.writer(f)

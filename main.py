@@ -54,7 +54,7 @@ while True: #Main code starts here
                             candidateDelete()
                         
                         elif subOp == 3:
-                            print(displayCandidates())
+                            displayCandidates()
                             
                         elif subOp == 4:
                             print("Returning to main menu...")

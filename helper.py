@@ -24,25 +24,25 @@ def fetchCandidates():
             data.append(i)
     return data[1:]
 
-def fetchVotersCSV():
+def fetchVoters():
     data = []
     with open("Data/voterList.csv", 'r') as f:
         reader = csv.reader(f)
         for i in reader:
             data.append(i)
-    return data[1:]
+    return data
 
-def fetchVotersBIN():
-    data = []
-    f = open("Data/voterList.dat", 'rb')
-    try:
-        while True:
-            i = pickle.load(f)
-            data.append(i)
-    except EOFError:
-        f.close()
-    data = [[list(data[i].values())[0], list(data[i].values())[1]] for i in range(len(data))]
-    return data 
+# def fetchVotersBIN():
+#     data = []
+#     f = open("Data/voterList.dat", 'rb')
+#     try:
+#         while True:
+#             i = pickle.load(f)
+#             data.append(i)
+#     except EOFError:
+#         f.close()
+#     data = [[list(data[i].values())[0], list(data[i].values())[1]] for i in range(len(data))]
+#     return data 
     
 def fetchSettings(sessionID=None):
     if sessionID is None:
@@ -90,20 +90,20 @@ def displayCandidates(): #Displays the candidates details for the voters to see 
         if row[4] != "Symbol": 
             candidateTable.add_row([row[0],row[1],row[2],row[3],row[4],row[5]]) #Adds rows into candidateTable one by one
     
-    return candidateTable
+    print(candidateTable)
 
 def displayVoters(): #Displays the voter details for the admin to see using prettytable  
-    data = fetchVotersBIN()
-    for i in data: print(i)
+    #data = fetchVoters()
+    #for i in data: print(i)
     # Need to modify pretty table code to make use of data from binary file 
-    # voterTable = PrettyTable(["Name","Age","Sex"]) #Creates a table with headers from the csv file. 
+    voterTable = PrettyTable(["UUID", "Name","Age","Sex","Voted"]) #Creates a table with headers from the csv file. 
 
-    # voterData = fetchVotersCSV()
+    voterData = fetchVoters()
     
-    # for row in voterData:
-    #     if row[1] != "Age": 
-    #         voterTable.add_row([row[0],row[1],row[2]]) #Adds rows into voterTable one by one
+    for row in voterData:
+        if row[1] != "Age": 
+            voterTable.add_row([row[0],row[1],row[2],row[3],row[4]]) #Adds rows into voterTable one by one
     
-    # return voterTable
+    print(voterTable)
 
 #^-------------------------------------------------^Displaying records^--------------------------------------------------^    
