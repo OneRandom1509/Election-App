@@ -92,7 +92,7 @@ while True: #Main code starts here
                         while True:
                             reply = elecSess(sessionID, settings, voteCount)
                             if reply[0]:
-                                voteCount = [reply[1]]
+                                voteCount = reply[1]
                                 continue
                             elif reply[2]:
                                 continue

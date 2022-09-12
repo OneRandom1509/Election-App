@@ -41,8 +41,9 @@ def fetchVotersBIN():
             data.append(i)
     except EOFError:
         f.close()
-    return data
-
+    data = [[list(data[i].values())[0], list(data[i].values())[1]] for i in range(len(data))]
+    return data 
+#
 def fetchSettings(sessionID=None):
     if sessionID is None:
         settingsFile = open("Data/settings.dat", "rb")

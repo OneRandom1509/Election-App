@@ -1,5 +1,5 @@
 # imports
-import datetime, pickle, uuid
+import datetime, pickle, uuid, csv
 from pprint import pprint
 from helper import *
 from eAuth import *
@@ -81,6 +81,7 @@ def elecSess(sessionID, settings,voteCount):
                     if confirm():
                         voteCount = vote(i[0], voteCount)
                         print("Vote casted successfully!")
+                        print(voteCount)
                         return (True, voteCount, False)
                     else:
                         print("Recast your vote!")
