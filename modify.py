@@ -95,6 +95,8 @@ def voterAdd(): #To add a record to voterList.csv and update voterList.dat with 
         print("Aborting")
 
 def voterDelete(): #To delete a record from voterList.csv and voterList.dat
+    found = False
+
     delVoterID = input("Enter voter's ID to delete from list: ")
 
     if confirm():
@@ -102,12 +104,17 @@ def voterDelete(): #To delete a record from voterList.csv and voterList.dat
 
         data = fetchVotersBIN() 
         for i in data:
-            if data["ID"] == delVoterID: #Storing all the records except the record to delete
-                print(f"Successfully deleted {delVoterID}'s details from the records")
-                delVoterName = data["Name"]
+            if i["ID"] == delVoterID: #Storing all the records except the record to delete
+                found = True
+                delVoterName = i["Name"]
                 continue
             l.append(i)
-
+        if found:
+            print(f"Successfully deleted {delVoterID}'s details from the records")
+        else:
+            print("No such voter ID found!")
+            return
+        
         with open("Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
             for i in l:
                 pickle.dump(i, f)
@@ -127,7 +134,7 @@ def voterDelete(): #To delete a record from voterList.csv and voterList.dat
 
 # Modifying candidates' list
 def candidateAdd(): #Adds details of a NEW CANDIDATE into candidateList.csv
-    addCandidateName = input("Enter voter name to add to list: ")
+    addCandidateName = input("Enter candidate name to add to list: ")
     addCandidateAge = input(f"Enter {addCandidateName}'s age: ")
     addCandidateSex = input(f"Enter {addCandidateName}'s gender: ")
     addCandidateAbout = input(f"Enter {addCandidateName}'s description: ")

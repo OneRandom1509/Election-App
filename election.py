@@ -85,7 +85,7 @@ def elecSess(sessionID, settings,voteCount):
                     else:
                         print("Recast your vote!")
                         pass
-            # need to add code to let use know if candidate id submitted is incorrect
+            # need to add code to let user know if candidate id submitted is incorrect
     else:
         print("Incorrect voter credentials!")
         return(False, voteCount, True)
