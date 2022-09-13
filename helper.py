@@ -1,9 +1,8 @@
 # imports
 import pickle, csv
 from prettytable import PrettyTable
-from pprint import pprint
 
-#----------------------------------------------------Misc-----------------------------------------------------------------
+#----------------------------------------------------------Misc-----------------------------------------------------------
 
 def elecPrompt(): #Prompt to accept name and UID of VOTERS
     name = input("Name: ")
@@ -16,7 +15,7 @@ def confirm(): #Prompt to confirm user choice
         return True
     else:
         return False
-#^--------------------------------------------------^Misc^---------------------------------------------------------------^
+#^--------------------------------------------------------^Misc^---------------------------------------------------------^
 #----------------------------------------------------Fetching records-----------------------------------------------------
 
 def fetchCandidates():
@@ -87,7 +86,6 @@ def displayVoters(): #Displays the voter details for the admin to see using pret
 
     voterTable = PrettyTable(voterData[0]) #Creates a table with headers from the csv file. 
     
-
     for row in voterData[1:]:
         voterTable.add_row([row[0],row[1],row[2],row[3],row[4]]) #Adds rows into voterTable one by one
     

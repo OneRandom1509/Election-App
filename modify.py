@@ -95,9 +95,6 @@ def voterAdd(): #To add a record to voterList.csv and update voterList.dat with 
             writer = csv.writer(f)
             writer.writerow([addVoterUUID,addVoterName,addVoterAge,addVoterSex,'N'])
 
-        # with open("Data/voterList.dat", "ab") as f:
-        #     pickle.dump({"ID":addVoterUUID, "Name":addVoterName}, f)
-
         print(f"Successfully added {addVoterName}'s details into the voters' database!")
     else:
         print("Aborting")
@@ -105,34 +102,19 @@ def voterAdd(): #To add a record to voterList.csv and update voterList.dat with 
 def voterDelete(): #To delete a record from voterList.csv and voterList.dat
     found = False
 
-    delVoterName = input("Enter voter's name to delete from the database: ")
+    delVoterUUID = input("Enter voter's UUID to delete from the database: ")
 
     if confirm():
-        # l = [] #Records to be rewritten are stored in this list
-
-        # data = fetchVotersBIN() 
-        # for i in data:
-        #     if i["ID"] == delVoterID: #Storing all the records except the record to delete
-        #         found = True
-        #         delVoterName = i["Name"]
-        #         continue
-        #     l.append(i)
-        # if found:
-        #     print(f"Successfully deleted {delVoterID}'s details from the records")
-        # else:
-        #     print("No such voter ID found!")
-        #     return
-        
-        # with open("Data/voterList.dat", 'wb') as f: #Writing all the records except the record to delete
-        #     for i in l:
-        #         pickle.dump(i, f)
 
         l = [] #Records to be rewritten are stored in this list
 
         data = fetchVoters()
         for i in data:
-            if i[0] != delVoterName: #Storing all records except the record to delete
-                l.append(i)
+            if i[0] == delVoterUUID: #Storing all records except the record to delete
+                found = True
+                print("Deleted {delVoterUUID}'s details from the database!")
+                continue
+            l.append(i)
         
         if not found:
             print("No such voter exists in the database!")
@@ -149,13 +131,14 @@ def candidateAdd(): #Adds details of a NEW CANDIDATE into candidateList.csv
     addCandidateName = input("Enter candidate name to add to list: ")
     addCandidateAge = input(f"Enter {addCandidateName}'s age: ")
     addCandidateSex = input(f"Enter {addCandidateName}'s gender: ")
+    addCandidateSymbol = input(f"Enter {addCandidateName}'s symbol: ")
     addCandidateAbout = input(f"Enter {addCandidateName}'s description: ")
     addCandidateID = str(uuid.uuid4()).split("-")[0]
     
     if confirm():
-        with open("Data/candidateList.csv", "a") as f:
+        with open("Data/candidateList.csv", "a", encoding = 'utf8') as f:
             writer = csv.writer(f)
-            writer.writerow([addCandidateID,addCandidateName,addCandidateAge,addCandidateSex,addCandidateAbout])
+            writer.writerow([addCandidateID,addCandidateName,addCandidateAge,addCandidateSex,addCandidateSymbol,addCandidateAbout])
         print(f"Successfully added {addCandidateName}'s details into the records")
     else:
         print("Aborting...")
@@ -173,7 +156,7 @@ def candidateDelete(): #Deletes details of an existing CANDIDATE from candidateL
                 continue
             l.append(i)
 
-        with open("Data/candidateList.csv", 'w') as f: #Writing all the records except the one to be deleted
+        with open("Data/candidateList.csv", 'w', encoding = 'utf8') as f: #Writing all the records except the one to be deleted
             writer = csv.writer(f)
             writer.writerows(l)
     else:
