@@ -78,7 +78,6 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
         with open("Data/cred.dat", 'wb') as f: #Writing back all the records including the modified one
             for i in l:
                 pickle.dump(i, f)
-        print(l)
     else:
         print("Aborting...")
 
