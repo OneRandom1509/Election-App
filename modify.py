@@ -56,30 +56,29 @@ def adminUpdate(): #Allows the admin to update an existing admin profile
     if confirm():
         f = open("Data/cred.dat", "rb")
         l = [] #Records to be rewritten are stored in this list
-
         try: #Searching for the record to be modified
             while True:
                 data = pickle.load(f)
                 if adminName == caesarCipher.caesarDecrypt(data['Admin Name']) and adminPassword == caesarCipher.caesarDecrypt(data["Password"]):
                     found = True
-                    adminNewPassword = input("New password: ")
-                    data["Password"] = adminNewPassword #Modifying the old password with the new password
-                    print("Updated password!")
-                else:
-                    print("Incorrect admin name or password!")
-                    f.close()
-                    return
                 l.append(data)  
         except EOFError:
             f.close()
-            if not found: #Checks if the inputted admin name exists in the first place or not 
-                print("Admin name does not exist in the database!") 
-                return
+
+        if found: #Checks if the inputted admin name exists in the first place or not 
+            adminNewPassword = input("New password: ")
+            for i in l:
+                if caesarCipher.caesarDecrypt(i["Admin Name"]) ==  adminName:
+                    i["Password"] = caesarCipher.caesarEncrypt(adminNewPassword) #Modifying the old password with the new password
+            print(f"{adminName}'s password updated!")
+        else:
+            print("Admin name does not exist in the database!") 
+            return
 
         with open("Data/cred.dat", 'wb') as f: #Writing back all the records including the modified one
             for i in l:
                 pickle.dump(i, f)
-        print(f"{adminName}'s password updated!")
+        print(l)
     else:
         print("Aborting...")
 
