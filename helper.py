@@ -20,7 +20,7 @@ def confirm(): #Prompt to confirm user choice
 
 def fetchCandidates():
     data = []
-    with open("Data/candidateList.csv", 'r', encoding = 'utf8') as f:
+    with open("Data/candidateList.csv", 'r', encoding = 'utf8', newline="") as f:
         reader = csv.reader(f)
         for i in reader:
             data.append(i)
@@ -28,7 +28,7 @@ def fetchCandidates():
 
 def fetchVoters():
     data = []
-    with open("Data/voterList.csv", 'r') as f:
+    with open("Data/voterList.csv", 'r', newline="") as f:
         reader = csv.reader(f)
         for i in reader:
             data.append(i)

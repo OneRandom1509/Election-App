@@ -14,78 +14,85 @@ while True: #Main code starts here
         lg = adminLogin()
         if lg[0]:
             while True:
+                print("")
                 print("1. Voters' List")
                 print("2. Candidates' List")
                 print("3. Admin Settings")
-                print("4. Setup voting session")
-                print("5. Start voting session")
+                print("4. Setup Voting Session")
+                print("5. Start Voting Session")
                 print("6. Logout")
+                print("7. Close Program")
 
                 try:
-                    mainOp = int(input("Enter your choice: "))
+                    mainOp = input("Enter your choice: ")
                 except:
                     print("Invalid Choice")
                     continue
                 #Voters' List related operations
-                if mainOp == 1:
+                if mainOp == "1":
                     while True:
                         subOp = subMenu() #Gets sub operation from this function
-                        if subOp == 1: 
+                        if subOp == "1": 
                             voterAdd()
 
-                        elif subOp == 2: 
+                        elif subOp == "2": 
                             voterDelete()
 
-                        elif subOp == 3: 
+                        elif subOp == "3": 
                             displayVoters()
                         
-                        elif subOp == 4:
+                        elif subOp == "4":
                             print("Returning to main menu...")
                             break
+                        else:
+                            print("Invalid sub-operation!")
 
                 #Candidates' List related operations
-                elif mainOp == 2: 
+                elif mainOp == "2": 
                     while True:
                         subOp = subMenu() #Gets sub operation from this function
-                        if subOp == 1: 
+                        if subOp == "1": 
                             candidateAdd()
 
-                        elif subOp == 2:
+                        elif subOp == "2":
                             candidateDelete()
                         
-                        elif subOp == 3:
+                        elif subOp == "3":
                             displayCandidates()
                             
-                        elif subOp == 4:
+                        elif subOp == "4":
                             print("Returning to main menu...")
                             break
+                        else:
+                            print("Invalid sub-operation!")
                 
                 #Admin related operations
-                elif mainOp == 3: 
+                elif mainOp == "3": 
                     while True:
                         subOp = subMenuAdmin() #Gets sub operation for admin operations from this function
-                        if subOp == 1: 
+                        if subOp == "1": 
                             adminCreate()
                         
-                        elif subOp == 2: 
+                        elif subOp == "2":
                             adminDelete()
                         
-                        elif subOp == 3: 
+                        elif subOp == "3": 
                             adminUpdate()
 
-                        elif subOp == 4:
+                        elif subOp == "4":
                             print("Returning to main menu...")
                             break
-                
+                        else:
+                            print("Invalid sub-operation!")
                 #Election settings
-                elif mainOp == 4: 
+                elif mainOp == "4": 
                     allSettings = fetchSettings() 
                     for i in allSettings: print(i) #lists settings of all sessions
                     
                     elecSettings(lg[1])
                 
                 #Election session
-                elif mainOp == 5:
+                elif mainOp == "5":
                     sessionID = input("Session ID: ")
                     if confirm():
                         settings = fetchSettings(sessionID)
@@ -104,14 +111,15 @@ while True: #Main code starts here
                     else:
                         continue
                 #Logout
-                elif mainOp == 6:
+                elif mainOp == "6":
                     break
 
                 #Terminating instance
-                elif mainOp == 7:
+                elif mainOp == "7":
                     print("Terminating instance...")
                     print("Thank you for using Election App!")
-                    
+                    exit()           
+                
                 else:
                     print("Invalid Operation!")
         else:

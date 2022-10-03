@@ -7,22 +7,24 @@ from eAuth import *
 #----------------------------------------------------------Menus----------------------------------------------------------
 
 def subMenu(): #Displays a submenu for each main operation in the main program and returns the choice accordingly
+    print("")
     print("1. Add a record")
     print("2. Delete a record")
     print("3. Display records")
     print("4. Back")
-    
-    subOp = int(input("Enter your choice: "))   
+
+    subOp = input("Enter your choice: ")
 
     return subOp
 
 def subMenuAdmin(): #Special sub menu for admin profile operations
+    print("")
     print("1. Create new admin profile")
     print("2. Delete an existing admin profile")
     print("3. Update an existing admin profile")
     print("4. Back")
-    
-    subOp = int(input("Enter your choice: "))
+
+    subOp = input("Enter your choice: ")
     
     return subOp
 
@@ -45,7 +47,7 @@ def elecSettings(admin):
         for i in fetchCandidates()[1:]:
             voteCount.append([i[0],i[1],0])
         
-        with open(f"Data/voteCount-{sessionID}.csv", "a") as voteCountFile:
+        with open(f"Data/voteCount-{sessionID}.csv", "a", newline="") as voteCountFile:
             w_o = csv.writer(voteCountFile)
             w_o.writerows(voteCount)
 
@@ -56,7 +58,7 @@ def elecSettings(admin):
 
 def elecSess(sessionID, settings,voteCount): #Starts a election session using an existing session id (check a file named voteCount-SessionID.csv)
     if voteCount == []:
-        with open(f"Data/voteCount-{sessionID}.csv", "r") as voteCountFile:
+        with open(f"Data/voteCount-{sessionID}.csv", "r", newline="") as voteCountFile:
             r_o = csv.reader(voteCountFile)
             for i in r_o: voteCount.append(i)
 
@@ -100,7 +102,7 @@ def vote(choiceID, voteCount):
             return voteCount
 
 def saveSession(sessionID, voteCount):
-    with open(f"Data/voteCount-{sessionID}.csv", "w") as voteCountFile:
+    with open(f"Data/voteCount-{sessionID}.csv", "w", newline="") as voteCountFile:
             w_o = csv.writer(voteCountFile)
             w_o.writerows(voteCount)
 

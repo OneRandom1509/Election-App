@@ -4,6 +4,8 @@ from election import *
 #---------------------------------------------------------Logins----------------------------------------------------------
 
 def adminLogin(): #Admin login details check
+    print("")
+    print("Log in as administrator")
     adminName = input("Admin Name: ")
     adminPassword = input("Password: ")
     f = open("Data/cred.dat", "rb")
@@ -19,13 +21,15 @@ def adminLogin(): #Admin login details check
 
 
 def voterLogin(): #Checks whether the VOTER'S name and UID exists within the database and correspond to each other
+    print("")
+    print("Log in as voter")
     ID = input("ID: ")
     name = input("Name: ")
     
     if ID == "EXIT" or name == "EXIT":
         return "EXIT"
         
-    f = open("Data/voterList.csv", 'r')
+    f = open("Data/voterList.csv", 'r', newline="")
     reader = csv.reader(f)
     
     for i in reader:

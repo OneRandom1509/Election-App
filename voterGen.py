@@ -16,7 +16,7 @@ def genVoter(n, lAge=18, uAge=100, ):
     return voters
 
 def dep(voters):
-    with open("voterList.csv", "w") as f:
+    with open("voterList.csv", "w", newline="") as f:
         wO = csv.writer(f)
         wO.writerow(["ID", "Name", "Age", "Sex", "Voted"])
         for i in voters:

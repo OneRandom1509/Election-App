@@ -23,7 +23,7 @@ def genCand(n=10, uAge=18, lAge=100, ):
 candidates = genCand()
 
 def dep():
-    with open("candidateList.csv", 'w') as f:
+    with open("candidateList.csv", 'w', newline="") as f:
         w_o = csv.writer(f)
         w_o.writerow(["ID", "Name", "Age", "Sex", "Symbol", "About" ])
         w_o.writerows(candidates)
