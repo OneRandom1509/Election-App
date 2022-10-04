@@ -58,11 +58,12 @@ def elecSettings(admin):
         return
 
 def elecSess(sessionID, settings,voteCount): #Starts a election session using an existing session id (check a file named voteCount-SessionID.csv)
-    if voteCount == []:
+    if voteCount == [] or voteCount == None:
+        voteCount = []
         with open(f"Data/voteCount-{sessionID}.csv", "r", newline="") as voteCountFile:
             r_o = csv.reader(voteCountFile)
             for i in r_o: voteCount.append(i)
-    print(voteCount)
+
     login = eAuth.voterLogin()
     if login == "EXIT":
         print("Saving session...")
@@ -129,9 +130,10 @@ def vote(choiceID, voteCount):
             return voteCount
 
 def saveSession(sessionID, voteCount):
-    with open(f"Data/voteCount-{sessionID}.csv", "w", newline="") as voteCountFile:
-            w_o = csv.writer(voteCountFile)
-            w_o.writerows(voteCount)
+    if voteCount != [] and voteCount != None:
+        with open(f"Data/voteCount-{sessionID}.csv", "w", newline="") as voteCountFile:
+                w_o = csv.writer(voteCountFile)
+                w_o.writerows(voteCount)
 
 def hasVoted(ID):
     voterData = helper.fetchVoters()
