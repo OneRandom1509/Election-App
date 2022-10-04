@@ -25,7 +25,7 @@ def voterLogin(): #Checks whether the VOTER'S name and UID exists within the dat
     print("Log in as voter")
     ID = input("ID: ")
     name = input("Name: ")
-    
+    election.voterID_ = ID
     if ID == "EXIT" or name == "EXIT":
         return "EXIT"
         
@@ -33,7 +33,7 @@ def voterLogin(): #Checks whether the VOTER'S name and UID exists within the dat
     reader = csv.reader(f)
     
     for i in reader:
-        if ID == i[0] and name == i[1] and election.hasVoted(ID) == False:
+        if ID == i[0] and name == i[1]:
             f.close()
             return True
     f.close()

@@ -94,9 +94,13 @@ while True: #Main code starts here
                 elif mainOp == "5":
                     helper.displayAllSettings() #Displays settings of all sessions using PrettyTable
                     
-                    sessionID = input("Session ID: ")
+                    sessionID = input("Session ID: ").strip()
                     if helper.confirm():
                         settings = helper.fetchSettings(sessionID)
+                        if settings == "No such session exists!":
+                            print(settings)
+                            continue
+
                         while True:
                             reply = election.elecSess(sessionID, settings, voteCount)
                             if reply[0]:

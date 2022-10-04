@@ -5,6 +5,8 @@ import eAuth
 
 #----------------------------------------------------------Menus----------------------------------------------------------
 
+voterID_ = ""
+
 def subMenu(): #Displays a submenu for each main operation in the main program and returns the choice accordingly
     print("")
     print("1. Add a record")
@@ -60,36 +62,62 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
         with open(f"Data/voteCount-{sessionID}.csv", "r", newline="") as voteCountFile:
             r_o = csv.reader(voteCountFile)
             for i in r_o: voteCount.append(i)
+    print(voteCount)
+    login = eAuth.voterLogin()
+    if login == "EXIT":
+        print("Saving session...")
+        return (False, voteCount, False) #(Has voted - False, voteCount List, Exit loop)
+    elif login: #Login check for voter
+        if not hasVoted(voterID_): #Checks if the voter has already voted
+            print("Candidate List:")
+            helper.displayCandidates()
+            print("") #Prints an empty line after the candidate list is printed
+            post = settings["Post"] #Settings recieved from main from input
+            print(f"Aforementioned table is the list of candidates for the election standing for {post}.\nYou may pick the candidate of your choice by submitting the unique id associated with the candidate (see candidate list — first column)")
 
-    if eAuth.voterLogin(): #Login check for voter
-        print("Candidate List:")
-        helper.displayCandidates()
-        print("") #Prints an empty line after the candidate list is printed
-        post = settings["Post"] #Settings recieved from main from input
-        print(f"Aforementioned table is the list of candidates for the election standing for {post}.\nYou may pick the candidate of your choice by submitting the unique id associated with the candidate (see candidate list — first column)")
-        
-        data = helper.fetchCandidates() #Gets candidate data from candidateList.csv
+            data = helper.fetchCandidates() #Gets candidate data from candidateList.csv
 
-        while True:
-            ch = input("Your choice: ")
-            if ch == "EXIT":
-                print("Saving session...")
-                return (False, voteCount, False) #(Has voted - False, voteCount List, Exit loop) 
-            
-            for i in data[1:]: #Ignoring heading of csv file and iterating through rest
-                if ch == i[0]:
-                    print(f"You have chosen to vote for {i[1]}")
-                    # confirming vote
-                    if helper.confirm():
-                        voteCount = vote(i[0], voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
-                        print("Vote casted successfully!")
-                        # print(voteCount)
-                        return (True, voteCount, False) #(Has voted - True, voteCount List, Exit loop)
-                    else:
-                        print("Recast your vote!")
-                        pass
-            else:
-                print("Candidate ID does not exist! Check the candidate list's ID column carefully and vote again")
+            while True:
+                ch = input("Your choice: ")
+                if ch == "EXIT":
+                    print("Saving session...")
+                    return (False, voteCount, False) #(Has voted - False, voteCount List, Exit loop) 
+
+                for i in data[1:]: #Ignoring heading of csv file and iterating through rest
+                    if ch == i[0]:
+                        print(f"You have chosen to vote for {i[1]}")
+                        # confirming vote
+                        if helper.confirm():
+                            
+                            f = open("Data/voterList.csv", "r", newline="")
+                            ro = csv.reader(f)
+                            l = [i for i in ro]
+                            f.close()
+
+                            k = [l[0]]
+                            l = l[1:]
+                            f = open("Data/voterList.csv", "w", newline="")
+                            for i in l:
+                                if i[0] == voterID_: #Checking if ID matches the accepted one
+                                    i[4] = "Y" #Changing "has voted" to Yes 
+                                k.append(i)
+                            
+                            wo = csv.writer(f)
+                            wo.writerows(k) #Writing back all of the data including the modified one
+                            f.close()
+                            voteCount = vote(i[0], voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
+                            print("")
+                            print("Vote casted successfully!")
+
+                            return (True, voteCount, False) #(Has voted - True, voteCount List, Exit loop)
+                        else:
+                            print("Recast your vote!")
+                            pass
+                else:
+                    print("Candidate ID does not exist! Check the candidate list's ID column carefully and vote again")
+        else:
+            print("Voter has already voted!")
+            return(False, voteCount, True)
     else:
         print("Incorrect voter credentials!")
         return(False, voteCount, True) #(Has voted - False, voteCount List, Continue loop) 
@@ -109,6 +137,6 @@ def hasVoted(ID):
     voterData = helper.fetchVoters()
     for i in voterData[1:]:
         if i[0] == ID and i[4] == "Y":
-            return True
-    return False
+            return True #returns true if the voter has already voted
+    return False # returns false if the voter has not voted
 #^---------------------------------------------------^Election Session^--------------------------------------------------^

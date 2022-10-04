@@ -54,7 +54,7 @@ def fetchSettings(sessionID=None):
                     print("Session found!")
                     return settings
         except EOFError:
-            print("No such session exists!")
+            return "No such session exists!"
             settingsFile.close()
 
 def displayAllSettings():
