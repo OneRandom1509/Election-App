@@ -81,7 +81,7 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                 ch = input("Your choice: ")
                 if ch == "EXIT":
                     print("Saving session...")
-                    return (False, voteCount, False) #(Has voted - False, voteCount List, Exit loop) 
+                    return (False, voteCount, False) #(Has voted - False, voteCount List, Continue Loop - False) 
 
                 for i in data[1:]: #Ignoring heading of csv file and iterating through rest
                     if ch == i[0]:
@@ -109,7 +109,7 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                             print("")
                             print("Vote casted successfully!")
 
-                            return (True, voteCount, False) #(Has voted - True, voteCount List, Exit loop)
+                            return (True, voteCount, False) #(Has voted - True, voteCount List, Continue Loop - False)
                         else:
                             print("Recast your vote!")
                             pass
@@ -117,10 +117,10 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                     print("Candidate ID does not exist! Check the candidate list's ID column carefully and vote again")
         else:
             print("Voter has already voted!")
-            return(False, voteCount, True)
+            return(False, voteCount, True) #(Has voted - True, voteCount List, Continue Loop - False)
     else:
         print("Incorrect voter credentials!")
-        return(False, voteCount, True) #(Has voted - False, voteCount List, Continue loop) 
+        return(False, voteCount, True) #(Has voted - False, voteCount List, Continue loop-True) 
 
 def vote(choiceID, voteCount):
     for i in voteCount:
