@@ -58,11 +58,12 @@ def elecSettings(admin):
         return
 
 def elecSess(sessionID, settings,voteCount): #Starts a election session using an existing session id (check a file named voteCount-SessionID.csv)
-    if voteCount == []:
+    if voteCount == [] or voteCount == None:
+        voteCount = []
         with open(f"Data/voteCount-{sessionID}.csv", "r", newline="") as voteCountFile:
             r_o = csv.reader(voteCountFile)
             for i in r_o: voteCount.append(i)
-    print(voteCount)
+
     login = eAuth.voterLogin()
     if login == "EXIT":
         print("Saving session...")
@@ -105,7 +106,7 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                             wo = csv.writer(f)
                             wo.writerows(k) #Writing back all of the data including the modified one
                             f.close()
-                            voteCount = vote(i[0], voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
+                            voteCount = vote(ch, voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
                             print("")
                             print("Vote casted successfully!")
 
@@ -129,9 +130,10 @@ def vote(choiceID, voteCount):
             return voteCount
 
 def saveSession(sessionID, voteCount):
-    with open(f"Data/voteCount-{sessionID}.csv", "w", newline="") as voteCountFile:
-            w_o = csv.writer(voteCountFile)
-            w_o.writerows(voteCount)
+    if voteCount != [] and voteCount != None:
+        with open(f"Data/voteCount-{sessionID}.csv", "w", newline="") as voteCountFile:
+                w_o = csv.writer(voteCountFile)
+                w_o.writerows(voteCount)
 
 def hasVoted(ID):
     voterData = helper.fetchVoters()
