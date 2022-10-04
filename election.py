@@ -117,10 +117,10 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                     print("Candidate ID does not exist! Check the candidate list's ID column carefully and vote again")
         else:
             print("Voter has already voted!")
-            return(False, voteCount, True) #(Has voted - True, voteCount List, Continue Loop - False)
+            return(False, voteCount, True) #(Has voted - True, voteCount List, Continue Loop - True)
     else:
         print("Incorrect voter credentials!")
-        return(False, voteCount, True) #(Has voted - False, voteCount List, Continue loop-True) 
+        return(False, voteCount, True) #(Has voted - False, voteCount List, Continue loop - True) 
 
 def vote(choiceID, voteCount):
     for i in voteCount:
