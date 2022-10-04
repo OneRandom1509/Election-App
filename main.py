@@ -1,8 +1,8 @@
 # imports
-from helper import *
-from eAuth import *
-from modify import *
-from election import *
+import helper
+import eAuth
+import modify
+import election
 
 #--------------------------------------------------------Global Vars--------------------------------------------------------
 
@@ -10,8 +10,8 @@ voteCount = []
 
 #--------------------------------------------------------Main Code--------------------------------------------------------
 while True: #Main code starts here
-    if fetchAdminUsers() != []: #Check for existing admin user
-        lg = adminLogin()
+    if helper.fetchAdminUsers() != []: #Check for existing admin user
+        lg = eAuth.adminLogin()
         if lg[0]:
             while True:
                 print("")
@@ -31,15 +31,15 @@ while True: #Main code starts here
                 #Voters' List related operations
                 if mainOp == "1":
                     while True:
-                        subOp = subMenu() #Gets sub operation from this function
+                        subOp = election.subMenu() #Gets sub operation from this function
                         if subOp == "1": 
-                            voterAdd()
+                            modify.voterAdd()
 
                         elif subOp == "2": 
-                            voterDelete()
+                            modify.voterDelete()
 
                         elif subOp == "3": 
-                            displayVoters()
+                            helper.displayVoters()
                         
                         elif subOp == "4":
                             print("Returning to main menu...")
@@ -50,15 +50,15 @@ while True: #Main code starts here
                 #Candidates' List related operations
                 elif mainOp == "2": 
                     while True:
-                        subOp = subMenu() #Gets sub operation from this function
+                        subOp = election.subMenu() #Gets sub operation from this function
                         if subOp == "1": 
-                            candidateAdd()
+                            modify.candidateAdd()
 
                         elif subOp == "2":
-                            candidateDelete()
+                            modify.candidateDelete()
                         
                         elif subOp == "3":
-                            displayCandidates()
+                            helper.displayCandidates()
                             
                         elif subOp == "4":
                             print("Returning to main menu...")
@@ -69,15 +69,15 @@ while True: #Main code starts here
                 #Admin related operations
                 elif mainOp == "3": 
                     while True:
-                        subOp = subMenuAdmin() #Gets sub operation for admin operations from this function
+                        subOp = election.subMenuAdmin() #Gets sub operation for admin operations from this function
                         if subOp == "1": 
-                            adminCreate()
+                            modify.adminCreate()
                         
                         elif subOp == "2":
-                            adminDelete()
+                            modify.adminDelete()
                         
                         elif subOp == "3": 
-                            adminUpdate()
+                            helper.adminUpdate()
 
                         elif subOp == "4":
                             print("Returning to main menu...")
@@ -86,25 +86,25 @@ while True: #Main code starts here
                             print("Invalid sub-operation!")
                 #Election settings
                 elif mainOp == "4": 
-                    allSettings = fetchSettings() 
+                    allSettings = helper.fetchSettings() 
                     for i in allSettings: print(i) #lists settings of all sessions
                     
-                    elecSettings(lg[1])
+                    election.elecSettings(lg[1])
                 
                 #Election session
                 elif mainOp == "5":
                     sessionID = input("Session ID: ")
-                    if confirm():
-                        settings = fetchSettings(sessionID)
+                    if helper.confirm():
+                        settings = helper.fetchSettings(sessionID)
                         while True:
-                            reply = elecSess(sessionID, settings, voteCount)
+                            reply = election.elecSess(sessionID, settings, voteCount)
                             if reply[0]:
                                 voteCount = reply[1]
                                 continue
                             elif reply[2]:
                                 continue
                             else:
-                                saveSession(sessionID, voteCount)
+                                election.saveSession(sessionID, voteCount)
                                 print("Session saved...")
                                 print("Exiting session")
                                 break
@@ -126,5 +126,5 @@ while True: #Main code starts here
             print("Invalid Admin Details!")
     
     else:
-        adminCreate() #Prompt to create a new admin user if no pre-existing admin user is found
+        modify.adminCreate() #Prompt to create a new admin user if no pre-existing admin user is found
 #^------------------------------------------------------^Main Code^------------------------------------------------------^
