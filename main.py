@@ -87,12 +87,13 @@ while True: #Main code starts here
                 #Election settings
                 elif mainOp == "4": 
                     allSettings = helper.fetchSettings() 
-                    for i in allSettings: print(i) #lists settings of all sessions
-                    
+                    helper.displayAllSettings() #Displays settings of all sessions using PrettyTable
                     election.elecSettings(lg[1])
                 
                 #Election session
                 elif mainOp == "5":
+                    helper.displayAllSettings() #Displays settings of all sessions using PrettyTable
+                    
                     sessionID = input("Session ID: ")
                     if helper.confirm():
                         settings = helper.fetchSettings(sessionID)
