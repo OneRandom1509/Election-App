@@ -83,29 +83,29 @@ def elecSess(sessionID, settings,voteCount): #Starts a election session using an
                     print("Saving session...")
                     return (False, voteCount, False) #(Has voted - False, voteCount List, Continue Loop - False) 
 
-                for i in data[1:]: #Ignoring heading of csv file and iterating through rest
-                    if ch == i[0]:
-                        print(f"You have chosen to vote for {i[1]}")
+                for candidate in data[1:]: #Ignoring heading of csv file and iterating through rest
+                    if ch == candidate[0]:
+                        print(f"You have chosen to vote for {candidate[1]}")
                         # confirming vote
                         if helper.confirm():
                             
                             f = open("Data/voterList.csv", "r", newline="")
                             ro = csv.reader(f)
-                            l = [i for i in ro]
+                            voterRecords = [voter for voter in ro]
                             f.close()
 
-                            k = [l[0]]
-                            l = l[1:]
+                            modifiedVoterRecords = [voterRecords[0]]
+                            voterRecords = voterRecords[1:]
                             f = open("Data/voterList.csv", "w", newline="")
-                            for i in l:
-                                if i[0] == voterID_: #Checking if ID matches the accepted one
-                                    i[4] = "Y" #Changing "has voted" to Yes 
-                                k.append(i)
+                            for voter in voterRecords:
+                                if voter[0] == voterID_: #Checking if ID matches the accepted one
+                                    voter[4] = "Y" #Changing "has voted" to Yes 
+                                modifiedVoterRecords.append(voter)
                             
                             wo = csv.writer(f)
-                            wo.writerows(k) #Writing back all of the data including the modified one
+                            wo.writerows(modifiedVoterRecords) #Writing back all of the data including the modified one
                             f.close()
-                            voteCount = vote(i[0], voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
+                            voteCount = vote(candidate[0], voteCount) #Accepts the candidate id and votecount and increments voteCount by 1
                             print("")
                             print("Vote casted successfully!")
 
